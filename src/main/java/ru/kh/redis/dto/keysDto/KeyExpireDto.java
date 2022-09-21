@@ -1,4 +1,4 @@
-package ru.kh.redis.dto;
+package ru.kh.redis.dto.keysDto;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;

@@ -1,6 +1,6 @@
 package ru.kh.redis.Models;
 
-import ru.kh.redis.dto.KeyDto;
+import ru.kh.redis.dto.keysDto.KeyDto;
 
 import java.util.Objects;
 

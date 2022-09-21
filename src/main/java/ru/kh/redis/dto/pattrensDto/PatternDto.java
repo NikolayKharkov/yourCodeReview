@@ -1,4 +1,4 @@
-package ru.kh.redis.dto;
+package ru.kh.redis.dto.pattrensDto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;

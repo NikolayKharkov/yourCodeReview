@@ -2,7 +2,8 @@ package ru.kh.redis.Repositories;
 
 import org.springframework.stereotype.Repository;
 import ru.kh.redis.Models.Key;
-import ru.kh.redis.dto.KeyExpireDto;
+import ru.kh.redis.Models.entities.StoredEntity;
+import ru.kh.redis.dto.keysDto.KeyExpireDto;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
@@ -18,14 +19,14 @@ import java.util.function.Predicate;
 @Repository
 public class CacheRepository {
 
-    private SoftReference<ConcurrentHashMap<Key, Object>> cacheMapRef =
+    private SoftReference<ConcurrentHashMap<Key, StoredEntity>> cacheMapRef =
             new SoftReference<>(new ConcurrentHashMap<>());
 
-    public Object getValue(Key key) {
-        return function(inputKey -> {return cacheMapRef.get().get(inputKey);}, key);
+    public StoredEntity getValue(Key key) {
+        return (StoredEntity) function(inputKey -> {return cacheMapRef.get().get(inputKey);}, key);
     }
 
-    public void putValue(Key key, Object value) {
+    public void putValue(Key key, StoredEntity value) {
         consumer((inputKey, inputValue) -> {cacheMapRef.get().put(inputKey, inputValue);}, key, value);
     }
 

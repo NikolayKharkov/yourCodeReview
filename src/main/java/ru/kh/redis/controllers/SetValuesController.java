@@ -1,38 +1,38 @@
 package ru.kh.redis.controllers;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.kh.redis.Models.Key;
-import ru.kh.redis.Models.entities.StringEntity;
-import ru.kh.redis.Services.SingleStringsService;
-import ru.kh.redis.dto.keysDto.KeyDto;
-import ru.kh.redis.dto.stringsDto.StringStoredEntityDto;
+import ru.kh.redis.Services.SetService;
+import ru.kh.redis.dto.keysDto.KeysDto;
+import ru.kh.redis.dto.setsDto.SetHgetDto;
+import ru.kh.redis.dto.setsDto.SetHsetDto;
 import ru.kh.redis.utils.ResponseErrorGenerator;
 
 import javax.validation.Valid;
 
 @RestController
-public class StringValuesController {
+public class SetValuesController {
 
-    private final SingleStringsService singleStringsService;
+    private final SetService setService;
 
     @Autowired
-    public StringValuesController(SingleStringsService singleStringsService) {
-        this.singleStringsService = singleStringsService;
+    public SetValuesController(SetService setService) {
+        this.setService = setService;
     }
 
-    @PostMapping("/get")
-    public ResponseEntity<String> get(@RequestBody @Valid KeyDto keyDto, BindingResult bindingResult) {
+    @PostMapping("/hset")
+    public ResponseEntity<String> hset(@RequestBody @Valid SetHsetDto setHsetDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
-           return ResponseErrorGenerator.generateErrorResponseByBinding(bindingResult);
+            return ResponseErrorGenerator.generateErrorResponseByBinding(bindingResult);
         }
-        Key key = Key.createKeyFromKeyDto(keyDto);
-        String result = singleStringsService.getStringValueByKey(key);
+        String result = setService.setEntryValuesFields(setHsetDto);
         ResponseEntity<String> responseError = ResponseErrorGenerator
                 .validateResultForKeyNotFoundOrWrongTypeErrors(result);
         if (responseError != null) {
@@ -41,14 +41,12 @@ public class StringValuesController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PostMapping("/set")
-    public ResponseEntity<String> set(@RequestBody @Valid StringStoredEntityDto storedEntityDto,
-                                      BindingResult bindingResult) {
+    @PostMapping("/hget")
+    public ResponseEntity<String> hget(@RequestBody @Valid SetHgetDto setHgetDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return ResponseErrorGenerator.generateErrorResponseByBinding(bindingResult);
         }
-        String result = singleStringsService.setValue(new Key(storedEntityDto.getKey()),
-                new StringEntity(storedEntityDto.getValue()));
+        String result = setService.getFieldByKeySet(setHgetDto);
         ResponseEntity<String> responseError = ResponseErrorGenerator
                 .validateResultForKeyNotFoundOrWrongTypeErrors(result);
         if (responseError != null) {
