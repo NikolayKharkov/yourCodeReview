@@ -33,8 +33,14 @@ public class ExpireController {
         }
         Key key = Key.createKeyFromKeyDto(keyDto);
         long result = expireService.getKeyTTL(key);
-        return new ResponseEntity<>(String.valueOf(result >= 0 ? TimeUnit.MILLISECONDS.toSeconds(result) : result),
-                result >= -2L ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+        System.out.println(result);
+        if (result == -1L) {
+            return new ResponseEntity<>("-1", HttpStatus.OK);
+        }
+        if (result == -2L) {
+            return new ResponseEntity<>("-2", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(String.valueOf(TimeUnit.MILLISECONDS.toSeconds(result)), HttpStatus.OK);
     }
 
     @PostMapping("/expire")

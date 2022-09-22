@@ -79,7 +79,6 @@ public class ListService {
             try {
                 ListEntity listEntity = (ListEntity) cacheRepository.getValue(key);
                 List<String> elements = listEntity.lget(listLGetDto.getStartIndex(), listLGetDto.getFinishIndex());
-                System.out.println(elements);
                 StringBuilder outPut = new StringBuilder();
                 for (int i = 0; i < elements.size(); i++) {
                     outPut

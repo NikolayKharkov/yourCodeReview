@@ -3,7 +3,6 @@ package ru.kh.redis.Services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.kh.redis.Models.Key;
-import ru.kh.redis.Models.entities.ListEntity;
 import ru.kh.redis.Models.entities.SetEntity;
 import ru.kh.redis.Models.entities.StoredEntity;
 import ru.kh.redis.Repositories.CacheRepository;
@@ -28,9 +27,9 @@ public class SetService {
             if (!isValueSetEntity(value)) {
                 return Consts.ERROR_MESSAGE_WRONG_TYPE;
             }
-            return String.valueOf(((SetEntity) value).putsKeysFields(setHsetDto.getFieldsValuesEntry().get(0)));
+            return String.valueOf(((SetEntity) value).putsKeysFields(setHsetDto.getFieldsValuesEntry()));
         }
-        SetEntity setEntity = new SetEntity(setHsetDto.getFieldsValuesEntry().get(0));
+        SetEntity setEntity = new SetEntity(setHsetDto.getFieldsValuesEntry());
         cacheRepository.putValue(key, setEntity);
         return String.valueOf(setEntity.getSize());
     }

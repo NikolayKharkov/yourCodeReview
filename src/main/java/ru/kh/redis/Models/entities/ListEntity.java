@@ -54,10 +54,10 @@ public class ListEntity implements StoredEntity<List<String>> {
 
     public List<String> lget(int startIndex, int finishIndex) {
         if (startIndex < 0) {
-            startIndex = (getSize() - Math.abs(startIndex));
+            startIndex = getSize() - Math.abs(startIndex) - 1;
         }
         if (finishIndex < 0) {
-            finishIndex = (getSize() - Math.abs(finishIndex));
+            finishIndex = getSize() - Math.abs(finishIndex) - 1;
         }
         if (startIndex >= getSize() || finishIndex >= getSize() || startIndex > finishIndex ||
                 startIndex < 0 || finishIndex < 0) {

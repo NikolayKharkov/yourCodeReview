@@ -2,9 +2,7 @@ package ru.kh.redis.dto.setsDto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class SetHsetDto {
 
@@ -14,12 +12,12 @@ public class SetHsetDto {
 
     @NotNull(message = "Fields values entry can't be null")
     @NotEmpty(message = "Fields values entry can't be empty")
-    private List<HashMap<String, String>> fieldsValuesEntry = new ArrayList<>();
+    private HashMap<String, String> fieldsValuesEntry = new HashMap<>();
 
     public SetHsetDto() {
     }
 
-    public SetHsetDto(String key, List<HashMap<String, String>> fieldsValuesEntry) {
+    public SetHsetDto(String key, HashMap<String, String> fieldsValuesEntry) {
         this.key = key;
         this.fieldsValuesEntry = fieldsValuesEntry;
     }
@@ -32,11 +30,11 @@ public class SetHsetDto {
         this.key = key;
     }
 
-    public List<HashMap<String, String>> getFieldsValuesEntry() {
+    public HashMap<String, String> getFieldsValuesEntry() {
         return fieldsValuesEntry;
     }
 
-    public void setFieldsValuesEntry(List<HashMap<String, String>> fieldsValuesEntry) {
+    public void setFieldsValuesEntry(HashMap<String, String> fieldsValuesEntry) {
         this.fieldsValuesEntry = fieldsValuesEntry;
     }
 }
