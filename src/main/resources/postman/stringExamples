@@ -1,0 +1,32 @@
+SET
+
+http://localhost:8080/set
+
+Тело запроса:
+
+{
+    "key": "key",
+    "value": "value"
+}
+
+Возможные ответы:
+"OK" - создан или перезаписан.
+"key-Key can't be null" или "key-Key can't be empty;" - если ключ пустой или null.
+"value-Value can't be null" или "value-Value can't be empty;" - если значение пустое или null.
+
+GET
+
+http://localhost:8080/get
+
+Тело запроса:
+
+{
+    "key": "key"
+}
+
+Возможные ответы:
+"value" - Строка, которая хранится по ключу.
+"key-Key can't be null" или "key-Key can't be empty;" - если ключ пустой или null.
+"(nil)" - если такого ключа не существует.
+"WRONGTYPE Operation against a key holding a wrong type" - если неверный тип, StoredEntity.
+

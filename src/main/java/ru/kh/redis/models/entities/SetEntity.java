@@ -1,4 +1,4 @@
-package ru.kh.redis.Models.entities;
+package ru.kh.redis.models.entities;
 
 import ru.kh.redis.utils.Consts;
 
@@ -27,7 +27,7 @@ public class SetEntity implements StoredEntity<HashMap<String, String>> {
 
     public int putsKeysFields(HashMap<String, String> keysFields) {
         value.putAll(keysFields);
-        return keysFields.size();
+        return value.size();
     }
 
     public String getFieldByKeySet(String keySet) {

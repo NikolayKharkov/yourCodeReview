@@ -1,0 +1,30 @@
+DEL
+
+http://localhost:8080/del
+
+Тело запроса:
+
+{
+    "keys": ["key1", "key2", "key3"]
+}
+
+Возможные ответы:
+"(integer) count_deleted" - кол-во удаленных ключей
+"Keys not specified" или "Keys not specified" - если массив ключей пуст или null.
+
+KEYS
+
+http://localhost:8080/keys
+
+Тело запроса:
+
+{
+    "pattern": "*"
+}
+
+Возможные ответы:
+1 ) value3
+2 ) value2
+3 ) value1 - ключи найденные по указанному паттерну.
+pattern-Pattern not specified" или "pattern-Pattern not specified; - если массив ключей пуст или null.
+Примечание: возможные паттрены можно посмотреть по ссылке https://redis.io/commands/keys/

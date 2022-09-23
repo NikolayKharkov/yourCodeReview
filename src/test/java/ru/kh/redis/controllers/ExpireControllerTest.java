@@ -12,8 +12,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.kh.redis.Models.Key;
-import ru.kh.redis.Services.ExpireService;
+import ru.kh.redis.models.Key;
+import ru.kh.redis.services.ExpireService;
 import ru.kh.redis.dto.keysDto.KeyExpireDto;
 
 @WebMvcTest(value = ExpireController.class)

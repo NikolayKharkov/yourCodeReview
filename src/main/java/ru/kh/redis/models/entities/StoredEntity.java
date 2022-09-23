@@ -1,4 +1,4 @@
-package ru.kh.redis.Models.entities;
+package ru.kh.redis.models.entities;
 
 public interface StoredEntity <V> {
     V getValue();

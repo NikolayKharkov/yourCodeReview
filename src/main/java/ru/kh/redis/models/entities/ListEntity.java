@@ -1,4 +1,4 @@
-package ru.kh.redis.Models.entities;
+package ru.kh.redis.models.entities;
 
 import java.util.ArrayList;
 import java.util.List;

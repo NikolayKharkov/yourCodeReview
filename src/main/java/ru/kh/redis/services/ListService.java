@@ -1,11 +1,11 @@
-package ru.kh.redis.Services;
+package ru.kh.redis.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.kh.redis.Models.Key;
-import ru.kh.redis.Models.entities.ListEntity;
-import ru.kh.redis.Models.entities.StoredEntity;
-import ru.kh.redis.Repositories.CacheRepository;
+import ru.kh.redis.models.Key;
+import ru.kh.redis.models.entities.ListEntity;
+import ru.kh.redis.models.entities.StoredEntity;
+import ru.kh.redis.repositories.CacheRepository;
 import ru.kh.redis.dto.listsDto.ListEntityDto;
 import ru.kh.redis.dto.listsDto.ListLGetDto;
 import ru.kh.redis.dto.listsDto.ListLindexDto;

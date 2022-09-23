@@ -1,9 +1,8 @@
-package ru.kh.redis.Services;
+package ru.kh.redis.services;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.kh.redis.Repositories.CacheRepository;
 import ru.kh.redis.dto.setsDto.SetHgetDto;
 import ru.kh.redis.dto.setsDto.SetHsetDto;
 import ru.kh.redis.utils.Consts;

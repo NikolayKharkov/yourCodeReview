@@ -7,8 +7,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.kh.redis.Models.Key;
-import ru.kh.redis.Services.ExpireService;
+import ru.kh.redis.models.Key;
+import ru.kh.redis.services.ExpireService;
 import ru.kh.redis.dto.keysDto.KeyDto;
 import ru.kh.redis.dto.keysDto.KeyExpireDto;
 import ru.kh.redis.utils.ResponseErrorGenerator;
@@ -44,7 +44,8 @@ public class ExpireController {
     }
 
     @PostMapping("/expire")
-    public ResponseEntity<String> setExpire(@RequestBody KeyExpireDto keyExpireDto, BindingResult bindingResult) {
+    public ResponseEntity<String> setExpire(@RequestBody @Valid KeyExpireDto keyExpireDto,
+                                            BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return ResponseErrorGenerator.generateErrorResponseByBinding(bindingResult);
         }

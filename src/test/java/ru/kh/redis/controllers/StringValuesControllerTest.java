@@ -12,9 +12,9 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.kh.redis.Models.Key;
-import ru.kh.redis.Models.entities.StringEntity;
-import ru.kh.redis.Services.SingleStringsService;
+import ru.kh.redis.models.Key;
+import ru.kh.redis.models.entities.StringEntity;
+import ru.kh.redis.services.SingleStringsService;
 import ru.kh.redis.utils.Consts;
 
 @WebMvcTest(value = StringValuesController.class)

@@ -1,4 +1,4 @@
-package ru.kh.redis.Models;
+package ru.kh.redis.models;
 
 import ru.kh.redis.dto.keysDto.KeyDto;
 

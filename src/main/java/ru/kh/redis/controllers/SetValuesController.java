@@ -7,7 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.kh.redis.Services.SetService;
+import ru.kh.redis.services.SetService;
 import ru.kh.redis.dto.setsDto.SetHgetDto;
 import ru.kh.redis.dto.setsDto.SetHsetDto;
 import ru.kh.redis.utils.ResponseErrorGenerator;

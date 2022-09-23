@@ -1,8 +1,8 @@
-package ru.kh.redis.Repositories;
+package ru.kh.redis.repositories;
 
 import org.springframework.stereotype.Repository;
-import ru.kh.redis.Models.Key;
-import ru.kh.redis.Models.entities.StoredEntity;
+import ru.kh.redis.models.Key;
+import ru.kh.redis.models.entities.StoredEntity;
 import ru.kh.redis.dto.keysDto.KeyExpireDto;
 
 import java.lang.ref.SoftReference;

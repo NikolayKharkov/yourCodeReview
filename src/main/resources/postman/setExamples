@@ -1,0 +1,35 @@
+HSET
+
+http://localhost:8080/hset
+
+Тело запроса:
+
+{
+    "key": "key",
+    "fieldsValuesEntry": {"field1": "value1", "field2": "value2"}
+}
+
+Возможные ответы:
+"key-Key can't be null" или "key-Key can't be empty;" - если ключ пустой или null.
+"Keys not specified" или "Keys not specified" - если массив ключей пуст или null.
+"Fields values entry can't be null" или "Fields values entry can't be empty" - если fieldsValuesEntry null или пустой
+"WRONGTYPE Operation against a key holding a wrong type" - если указываемый ключ, хранит другой тип значение.
+"размер словаря" - возвращает размер словаря, который хранится по ключу.
+
+
+HGET
+
+http://localhost:8080/hget
+
+Тело запроса:
+
+{
+    "key": "key",
+    "keySet": "field1"
+}
+
+Возможные ответы:
+"key-Key can't be null" или "key-Key can't be empty;" - если ключ пустой или null.
+"keySet-Key set can't be null" или "keySet-Key set can't be empty; - если ключ для словаря пустой или null
+"WRONGTYPE Operation against a key holding a wrong type" - если указываемый ключ, хранит другой тип значение.
+"значение" - возвращает значение словаря, которое хранится по ключу.

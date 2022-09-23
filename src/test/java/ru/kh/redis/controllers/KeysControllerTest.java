@@ -12,7 +12,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.kh.redis.Services.KeysService;
+import ru.kh.redis.services.KeysService;
 
 @WebMvcTest(value = KeysController.class)
 class KeysControllerTest {

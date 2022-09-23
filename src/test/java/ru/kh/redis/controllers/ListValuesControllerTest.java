@@ -12,11 +12,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.kh.redis.Models.Key;
-import ru.kh.redis.Models.entities.StringEntity;
-import ru.kh.redis.Services.ListService;
-import ru.kh.redis.Services.SingleStringsService;
-import ru.kh.redis.dto.keysDto.KeyDto;
+import ru.kh.redis.models.Key;
+import ru.kh.redis.services.ListService;
 import ru.kh.redis.dto.listsDto.ListEntityDto;
 import ru.kh.redis.dto.listsDto.ListLGetDto;
 import ru.kh.redis.dto.listsDto.ListLindexDto;
@@ -24,8 +21,6 @@ import ru.kh.redis.dto.listsDto.ListLsetDto;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @WebMvcTest(value = ListValuesController.class)
 class ListValuesControllerTest {

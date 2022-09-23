@@ -1,0 +1,35 @@
+TTL
+
+http://localhost:8080/ttl
+
+Тело запроса:
+
+{
+    "key": "key"
+}
+
+Возможные ответы:
+"-1" - если у ключа нет таймера на удаление.
+"-2" - если ключа нет существует.
+"seconds" - где seconds кол-во секунду до удаления.
+"key-Key can't be null" или "key-Key can't be empty;" - если ключ пустой или null.
+
+EXPIRE
+
+http://localhost:8080/expire
+
+Тело запроса:
+
+{
+    "key": "key",
+    "values": ["key1", "key2", "key3"]
+}
+
+Возможные ответы:
+"key-Key can't be null" или "key-Key can't be empty;" - если ключ пустой или null.
+"Time not specified" или "Time must be greater than zero" - если кол-во секунд null или имеют отрицательное значение.
+"1" - таймер на удаление поставлен на ключ.
+"0" - ошибка. Скорей всего ключ не представлен.
+
+
+
