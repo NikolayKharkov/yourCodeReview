@@ -1,0 +1,93 @@
+LPUSH
+
+http://localhost:8080/lpush
+
+Тело запроса:
+
+{
+    "key": "key",
+    "values": ["value1", "value2", "value3"]
+}
+
+Возможные ответы:
+"key-Key can't be null" или "key-Key can't be empty;" - если ключ пустой или null.
+"values-Values not specified" или "values-Values not specified;" - если массив значений пустой или null
+"WRONGTYPE Operation against a key holding a wrong type" - если указываемый ключ, хранит другой тип значение.
+"(integer) list size" - кол-во в списке, который хранится по указанному ключу.
+
+LSET
+
+http://localhost:8080/lset
+
+Тело запроса:
+
+{
+    "key": "key",
+    "value": "value1",
+    "index": 0
+}
+
+Возможные ответы:
+"key-Key can't be null" или "key-Key can't be empty;" - если ключ пустой или null.
+"value-Value can't be null" или "value-Value can't be empty;" - если значение пустое или null.
+"Index can't be null" или "Index can't be negative" - если индекс отрицательный или null
+"WRONGTYPE Operation against a key holding a wrong type" - если указываемый ключ, хранит другой тип значение.
+"Index bound of array" - если выход за пределы массива.
+"list size" - длина списка, хранимый по ключу.
+
+LGET
+
+http://localhost:8080/lget
+
+Тело запроса:
+
+{
+    "key": "key",
+    "startIndex": 0,
+    "finishIndex": 3
+}
+
+Возможные ответы:
+"key-Key can't be null" или "key-Key can't be empty;" - если ключ пустой или null.
+"Start index can't be null" - если startIndex null
+"Finish index can't be null" - если finishIndex null
+"WRONGTYPE Operation against a key holding a wrong type" - если указываемый ключ, хранит другой тип значение.
+"Index bound of array" - если выход за пределы массива.
+"1) value1
+ ...
+ 5) value5" - ключи, которые указаны в пределе указанных индексов.
+
+LINDEX
+
+http://localhost:8080/lindex
+
+Тело запроса:
+
+{
+    "key": "key",
+    "index": 0
+}
+
+Возможные ответы:
+"key-Key can't be null" или "key-Key can't be empty;" - если ключ пустой или null.
+"Index can't be null" или "Index can't be negative" - если индекс отрицательный или null
+"WRONGTYPE Operation against a key holding a wrong type" - если указываемый ключ, хранит другой тип значение.
+"Index bound of array" - если выход за пределы массива.
+"value" - значение.
+
+LLEN
+
+http://localhost:8080/llen
+
+Тело запроса:
+
+{
+    "key": "key"
+}
+
+Возможные ответы:
+"key-Key can't be null" или "key-Key can't be empty;" - если ключ пустой или null.
+"WRONGTYPE Operation against a key holding a wrong type" - если указываемый ключ, хранит другой тип значение.
+"list size" - длина списка, хранимый по ключу.
+
+
