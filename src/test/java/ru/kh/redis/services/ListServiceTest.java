@@ -3,7 +3,7 @@ package ru.kh.redis.services;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.kh.redis.models.Key;
+import ru.kh.redis.dto.keysDto.KeyDto;
 import ru.kh.redis.dto.listsDto.ListEntityDto;
 import ru.kh.redis.dto.listsDto.ListLGetDto;
 import ru.kh.redis.dto.listsDto.ListLindexDto;
@@ -25,27 +25,27 @@ class ListServiceTest {
     ListEntityDto listEntityDto = new ListEntityDto("key", values);
 
     @Test
-    public void testPushValuesWhenNotExist() {
+    void testPushValuesWhenNotExist() {
         String result = listService.pushValuesOrCreate(listEntityDto);
         assertEquals(result, String.valueOf(values.size()));
     }
 
     @Test
-    public void testPushValuesWhenExist() {
+    void testPushValuesWhenExist() {
         listService.pushValuesOrCreate(listEntityDto);
         String result = listService.pushValuesOrCreate(listEntityDto);
         assertEquals(String.valueOf(values.size()), result);
     }
 
     @Test
-    public void testSize() {
+    void testSize() {
         listService.pushValuesOrCreate(listEntityDto);
-        String result = listService.getListSize(new Key("key"));
+        String result = listService.getListSize(new KeyDto("key"));
         assertEquals(String.valueOf(values.size()), result);
     }
 
     @Test
-    public void testGetElementByIndex() {
+    void testGetElementByIndex() {
         listService.pushValuesOrCreate(listEntityDto);
         ListLindexDto listLindexDto = new ListLindexDto("key", 1);
         String result = listService.getElementFromListByKey(listLindexDto);
@@ -53,7 +53,7 @@ class ListServiceTest {
     }
 
     @Test
-    public void testReplaceElementByIndex() {
+    void testReplaceElementByIndex() {
         listService.pushValuesOrCreate(listEntityDto);
         ListLsetDto listLsetDto = new ListLsetDto("key", "New value", 0);
         listService.replaceValueByIndex(listLsetDto);
@@ -63,7 +63,7 @@ class ListServiceTest {
     }
 
     @Test
-    public void testGetElementsByStartAndFinishIndices() {
+    void testGetElementsByStartAndFinishIndices() {
         List<String> values = new ArrayList<>(
                 List.of("I", "think", "therefore", "I", "am", "sayeth", "Rene", "Decartes"));
         ListEntityDto listEntityDto = new ListEntityDto("key", values);
@@ -77,7 +77,7 @@ class ListServiceTest {
     }
 
     @Test
-    public void testGetElementsByStartAndFinishIndicesAndExpectIndexBoundException() {
+    void testGetElementsByStartAndFinishIndicesAndExpectIndexBoundException() {
         List<String> values = new ArrayList<>(
                 List.of("I", "think", "therefore", "I", "am", "sayeth", "Rene", "Decartes"));
         ListEntityDto listEntityDto = new ListEntityDto("key", values);

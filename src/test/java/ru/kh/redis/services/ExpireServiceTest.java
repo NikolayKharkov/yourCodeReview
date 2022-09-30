@@ -3,6 +3,7 @@ package ru.kh.redis.services;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.kh.redis.dto.keysDto.KeyDto;
 import ru.kh.redis.models.Key;
 import ru.kh.redis.models.entities.StringEntity;
 import ru.kh.redis.dto.keysDto.KeyExpireDto;
@@ -21,15 +22,13 @@ class ExpireServiceTest {
     @Autowired
     ExpireService expireService;
 
-    final long RESULT_WHEN_KEY_NOT_FOUND = 0L;
+    final String RESULT_WHEN_KEY_FOUND = "1";
 
-    final long RESULT_WHEN_KEY_FOUND = 1L;
-
-    final long RESULT_WHEN_KEY_NOT_EXPIRE = -1L;
-
-    final long RESULT_WHEN_KEY_EXPIRE_NOT_EXIST = -2L;
+    final String RESULT_WHEN_KEY_NOT_EXPIRE = "-1";
 
     Key defaultKey = new Key("key");
+
+    KeyDto defaultKeyDto = new KeyDto("key");
 
     StringEntity defaultStringEntity = new StringEntity("value");
 
@@ -38,60 +37,60 @@ class ExpireServiceTest {
     String defaultValue = "value";
 
     @Test
-    public void testTtlWhenKeyIsExistButNotExpired() {
+    void testTtlWhenKeyIsExistButNotExpired() {
         stringsService.setValue(defaultKey, defaultStringEntity);
-        long result = expireService.getKeyTTL(defaultKey);
+        String result = expireService.getKeyTTL(defaultKeyDto);
         assertEquals(result, RESULT_WHEN_KEY_NOT_EXPIRE);
     }
 
     @Test
-    public void testTtlWhenKeyIsNotExist() {
-        long result = expireService.getKeyTTL(defaultKey);
-        assertEquals(result, RESULT_WHEN_KEY_EXPIRE_NOT_EXIST);
+    void testTtlWhenKeyIsNotExist() {
+        String result = expireService.getKeyTTL(defaultKeyDto);
+        assertEquals(result, null);
     }
 
     @Test
-    public void testExpireWhenKeyIsNotExist() {
+    void testExpireWhenKeyIsNotExist() {
         KeyExpireDto keyExpireDto = new KeyExpireDto(defaultKeyValue, 6);
-        long result = expireService.expireKey(keyExpireDto);
-        assertEquals(result, RESULT_WHEN_KEY_NOT_FOUND);
+        String result = expireService.expireKey(keyExpireDto);
+        assertEquals(result, null);
     }
 
     @Test
-    public void testExpireWhenKeyIsExist() {
+    void testExpireWhenKeyIsExist() {
         stringsService.setValue(defaultKey, defaultStringEntity);
         KeyExpireDto keyExpireDto = new KeyExpireDto(defaultKeyValue, 6);
-        long result = expireService.expireKey(keyExpireDto);
+        String result = expireService.expireKey(keyExpireDto);
         assertEquals(result, RESULT_WHEN_KEY_FOUND);
     }
 
     @Test
-    public void testExpireWhenKeySetExpireButStillExist() throws InterruptedException {
+    void testExpireWhenKeySetExpireButStillExist() throws InterruptedException {
         stringsService.setValue(defaultKey, defaultStringEntity);
         KeyExpireDto keyExpireDto = new KeyExpireDto(defaultKeyValue, 10);
         expireService.expireKey(keyExpireDto);
         Thread.sleep(5000);
-        String result = stringsService.getStringValueByKey(defaultKey);
+        String result = stringsService.getStringValueByKey(defaultKeyDto);
         assertEquals(result, defaultValue);
     }
 
     @Test
-    public void testExpireWhenKeySetExpireThenWasRemoved() throws InterruptedException {
+    void testExpireWhenKeySetExpireThenWasRemoved() throws InterruptedException {
         stringsService.setValue(defaultKey, defaultStringEntity);
         KeyExpireDto keyExpireDto = new KeyExpireDto(defaultKeyValue, 1);
         expireService.expireKey(keyExpireDto);
         Thread.sleep(2000);
-        String result = stringsService.getStringValueByKey(defaultKey);
+        String result = stringsService.getStringValueByKey(defaultKeyDto);
         assertEquals(result, Consts.ERROR_MESSAGE_KEY_NOT_FOUND);
     }
 
     @Test
-    public void testTtlTime() throws InterruptedException {
+    void testTtlTime() throws InterruptedException {
         stringsService.setValue(defaultKey, defaultStringEntity);
         KeyExpireDto keyExpireDto = new KeyExpireDto(defaultKeyValue, 10);
         expireService.expireKey(keyExpireDto);
         Thread.sleep(2000);
-        long result = TimeUnit.MILLISECONDS.toSeconds(expireService.getKeyTTL(defaultKey));
+        long result = TimeUnit.MILLISECONDS.toSeconds(Long.valueOf(expireService.getKeyTTL(defaultKeyDto)));
         assertTrue(result <= 8L);
     }
 }

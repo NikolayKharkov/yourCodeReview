@@ -2,9 +2,12 @@ package ru.kh.redis.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.kh.redis.dto.keysDto.KeyDto;
 import ru.kh.redis.models.Key;
 import ru.kh.redis.repositories.CacheRepository;
 import ru.kh.redis.dto.keysDto.KeyExpireDto;
+
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class ExpireService {
@@ -16,18 +19,18 @@ public class ExpireService {
         this.cacheRepository = cacheRepository;
     }
 
-    public int expireKey(KeyExpireDto keyExpireDto) {
+    public String expireKey(KeyExpireDto keyExpireDto) {
         return cacheRepository.setExpireOnKey(keyExpireDto);
     }
 
-    public long getKeyTTL(Key key) {
-        key = cacheRepository.getKey(key);
+    public String getKeyTTL(KeyDto keyDto) {
+        Key key = cacheRepository.getKey(Key.createKeyFromKeyDto(keyDto));
         if (key == null) {
-            return -2L;
+            return null;
         }
-        if (!key.isHasExpirationTime()) {
-            return -1L;
+        if (key.isHasExpirationTime()) {
+            return String.valueOf(TimeUnit.MILLISECONDS.toSeconds(key.getTTL()));
         }
-        return key.getTTL();
+        return "-1";
     }
 }

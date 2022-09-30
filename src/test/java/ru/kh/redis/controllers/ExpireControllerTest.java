@@ -12,9 +12,13 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.kh.redis.dto.keysDto.KeyDto;
 import ru.kh.redis.models.Key;
 import ru.kh.redis.services.ExpireService;
 import ru.kh.redis.dto.keysDto.KeyExpireDto;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 @WebMvcTest(value = ExpireController.class)
 class ExpireControllerTest {
@@ -29,40 +33,44 @@ class ExpireControllerTest {
 
     final String EXPIRE = "/expire";
 
-    final long KEY_NOT_EXPIRED = -1L;
+    final String KEY_NOT_EXPIRED = "-1";
 
-    final long ERROR_KEY_NOT_FOUND = -2L;
+    final String ERROR_KEY_NOT_FOUND = "-2";
 
-    final int EXPIRE_WHEN_KEY_NOT_FOUND = 0;
+    final String EXPIRE_WHEN_KEY_NOT_FOUND = "0";
 
-    final int EXPIRE_WHEN_KEY_FOUND = 1;
+    final String EXPIRE_WHEN_KEY_FOUND = "1";
 
     String jsonExampleTtl = "{\"key\":\"test_key\",\"seconds\":5}";
 
+    String keyCantBeNullJson = "{\"key\":\"Key can't be null. Actual value: null\"}";
+
+    String keyCantBeEmptyJson = "{\"key\":\"Key can't be empty. Actual value: null\"}";
+
     @Test
     public void testTtlWhenKeyNotExist() throws Exception {
-        Mockito.when(expireService.getKeyTTL(Mockito.any(Key.class)))
-                .thenReturn(ERROR_KEY_NOT_FOUND);
+        when(expireService.getKeyTTL(Mockito.any(KeyDto.class)))
+                .thenReturn(null);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(TTL)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(jsonExampleTtl)
                 .contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = mvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        Assertions.assertEquals(String.valueOf(ERROR_KEY_NOT_FOUND), response.getContentAsString());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+        assertEquals(ERROR_KEY_NOT_FOUND, response.getContentAsString());
     }
 
     @Test
     public void testTtlWhenKeyExistButNotExpired() throws Exception {
-        Mockito.when(expireService.getKeyTTL(Mockito.any(Key.class)))
+        when(expireService.getKeyTTL(Mockito.any(KeyDto.class)))
                 .thenReturn(KEY_NOT_EXPIRED);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(TTL)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(jsonExampleTtl)
                 .contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = mvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
-        Assertions.assertEquals(String.valueOf(KEY_NOT_EXPIRED), response.getContentAsString());
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(KEY_NOT_EXPIRED, response.getContentAsString());
     }
 
     @Test
@@ -74,45 +82,46 @@ class ExpireControllerTest {
                 .contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = mvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        Assertions.assertEquals("key-Key can't be empty;key-Key can't be null;",
+        Assertions.assertEquals("[" + keyCantBeNullJson + "," + keyCantBeEmptyJson + "]",
                 response.getContentAsString());
     }
 
     @Test
     public void testTtlWhenInputJsonWithEmptyKey() throws Exception {
         String setJsonWithKeyNull = "{\"key\":\"\",\"seconds\":4}";
+        String expected = "{\"key\":\"Key can't be empty. Actual value: \"}";
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(TTL)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(setJsonWithKeyNull)
                 .contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = mvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        Assertions.assertEquals("key-Key can't be empty;", response.getContentAsString());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+        assertEquals("[" + expected + "]", response.getContentAsString());
     }
 
     @Test
     public void testExpireWhenKeyNotExist() throws Exception {
-        Mockito.when(expireService.expireKey(Mockito.any(KeyExpireDto.class)))
-                .thenReturn(EXPIRE_WHEN_KEY_NOT_FOUND);
+        when(expireService.expireKey(Mockito.any(KeyExpireDto.class)))
+                .thenReturn(null);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(EXPIRE)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(jsonExampleTtl)
                 .contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = mvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        Assertions.assertEquals(String.valueOf(EXPIRE_WHEN_KEY_NOT_FOUND), response.getContentAsString());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+        assertEquals(EXPIRE_WHEN_KEY_NOT_FOUND, response.getContentAsString());
     }
 
     @Test
     public void testExpireWhenKeyExist() throws Exception {
-        Mockito.when(expireService.expireKey(Mockito.any(KeyExpireDto.class)))
+        when(expireService.expireKey(Mockito.any(KeyExpireDto.class)))
                 .thenReturn(EXPIRE_WHEN_KEY_FOUND);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(EXPIRE)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(jsonExampleTtl)
                 .contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = mvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
-        Assertions.assertEquals(String.valueOf(EXPIRE_WHEN_KEY_FOUND), response.getContentAsString());
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(EXPIRE_WHEN_KEY_FOUND, response.getContentAsString());
     }
 }

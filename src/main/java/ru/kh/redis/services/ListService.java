@@ -2,6 +2,7 @@ package ru.kh.redis.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.kh.redis.dto.keysDto.KeyDto;
 import ru.kh.redis.models.Key;
 import ru.kh.redis.models.entities.ListEntity;
 import ru.kh.redis.models.entities.StoredEntity;
@@ -38,9 +39,10 @@ public class ListService {
         return String.valueOf(listEntity.getSize());
     }
 
-    public String getListSize(Key key) {
+    public String getListSize(KeyDto keyDto) {
+        Key key = Key.createKeyFromKeyDto(keyDto);
         String result = validateValueByKey(key);
-        if (result.equals("OK")) {
+        if (result.equals(Consts.OK)) {
             result = String.valueOf(((ListEntity) cacheRepository.getValue(key)).getSize());
         }
         return result;
@@ -49,7 +51,7 @@ public class ListService {
     public String replaceValueByIndex(ListLsetDto listLsetDto) {
         Key key = new Key(listLsetDto.getKey());
         String result = validateValueByKey(key);
-        if (result.equals("OK")) {
+        if (result.equals(Consts.OK)) {
             result = String.valueOf(((ListEntity) cacheRepository.getValue(key))
                     .lset(listLsetDto.getIndex(), listLsetDto.getValue()));
         }
@@ -59,7 +61,7 @@ public class ListService {
     public String getElementFromListByKey(ListLindexDto listLindexDto) {
         Key key = new Key(listLindexDto.getKey());
         String result = validateValueByKey(key);
-        if (result.equals("OK")) {
+        if (result.equals(Consts.OK)) {
             try {
                 ListEntity listEntity = (ListEntity) cacheRepository.getValue(key);
                 result = listEntity.lindex(listLindexDto.getIndex());
@@ -75,7 +77,7 @@ public class ListService {
     public String getElementsByStartAndFinishIndices(ListLGetDto listLGetDto) {
         Key key = new Key(listLGetDto.getKey());
         String result = validateValueByKey(key);
-        if (result.equals("OK")) {
+        if (result.equals(Consts.OK)) {
             try {
                 ListEntity listEntity = (ListEntity) cacheRepository.getValue(key);
                 List<String> elements = listEntity.lget(listLGetDto.getStartIndex(), listLGetDto.getFinishIndex());
@@ -106,11 +108,11 @@ public class ListService {
 
     private String validateValueByKey(Key key) {
         if (!isKeyExist(key)) {
-            return "(nil)";
+            return Consts.ERROR_MESSAGE_KEY_NOT_FOUND;
         }
         if (!isValueListEntity(cacheRepository.getValue(key))) {
             return Consts.ERROR_MESSAGE_WRONG_TYPE;
         }
-        return "OK";
+        return Consts.OK;
     }
 }

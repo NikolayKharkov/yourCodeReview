@@ -23,21 +23,21 @@ public class CacheRepository {
             new SoftReference<>(new ConcurrentHashMap<>());
 
     public StoredEntity getValue(Key key) {
-        return (StoredEntity) function(inputKey -> {return cacheMapRef.get().get(inputKey);}, key);
+        return (StoredEntity) function(inputKey -> cacheMapRef.get().get(inputKey), key);
     }
 
     public void putValue(Key key, StoredEntity value) {
-        consumer((inputKey, inputValue) -> {cacheMapRef.get().put(inputKey, inputValue);}, key, value);
+        consumer((inputKey, inputValue) -> cacheMapRef.get().put(inputKey, inputValue), key, value);
     }
 
     public boolean hasKey(Key key) {
-        return predicate(keyValue -> {return cacheMapRef.get().containsKey(keyValue);}, key);
+        return predicate(keyValue -> cacheMapRef.get().containsKey(keyValue), key);
     }
 
-    public int setExpireOnKey(KeyExpireDto keyExpireDto) {
+    public String setExpireOnKey(KeyExpireDto keyExpireDto) {
         Key key = getKey(new Key(keyExpireDto.getKey()));
         if (key == null) {
-            return 0;
+            return null;
         }
         key.setHasExpirationTime(true);
         long expireSeconds = TimeUnit.SECONDS.toMillis(keyExpireDto.getSeconds());
@@ -51,7 +51,7 @@ public class CacheRepository {
             Timer timer = new Timer(expiredKey.getKeyValue());
             timer.schedule(task, expiredTime);
         }, key, expireSeconds);
-        return 1;
+        return "1";
     }
 
     private boolean removeKey(Key key) {

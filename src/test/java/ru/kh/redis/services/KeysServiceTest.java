@@ -24,7 +24,7 @@ class KeysServiceTest {
     CacheRepository cacheRepository;
 
     @Test
-    public void testDel() {
+    void testDel() {
         String[] keys = {"key1", "key2", "key3"};
         for (String key : keys) {
             stringsService.setValue(new Key(key), new StringEntity("value"));
@@ -34,7 +34,7 @@ class KeysServiceTest {
     }
 
     @Test
-    public void testKeysWhenAllPattern() {
+    void testKeysWhenAllPattern() {
         String pattern = "*";
         List<String> keys = List.of("key1", "key2", "key3");
         for (String key : keys) {
@@ -45,7 +45,7 @@ class KeysServiceTest {
     }
 
     @Test
-    public void testKeysWhenAskSign() {
+    void testKeysWhenAskSign() {
         String pattern = "k?";
         List<String> keys = List.of("key1", "key2", "ke");
         List<String> expected = List.of("ke");
@@ -57,7 +57,7 @@ class KeysServiceTest {
     }
 
     @Test
-    public void testKeysWhenStarSign() {
+    void testKeysWhenStarSign() {
         String pattern = "k*2";
         List<String> keys = List.of("key1", "key2", "key3");
         List<String> expected = List.of("key2");
@@ -69,7 +69,7 @@ class KeysServiceTest {
     }
 
     @Test
-    public void testKeysWhenMatchersLetters() {
+    void testKeysWhenMatchersLetters() {
         String pattern = "h[ae]llo";
         List<String> keys = List.of("hello", "hallo", "hillo");
         List<String> expected = List.of("hallo", "hello");
@@ -81,7 +81,7 @@ class KeysServiceTest {
     }
 
     @Test
-    public void testKeysWhenNoMatchersLetters() {
+    void testKeysWhenNoMatchersLetters() {
         String pattern = "h[^e]llo";
         List<String> keys = List.of("hello", "hallo", "hbllo");
         List<String> expected = List.of("hallo", "hbllo");
@@ -93,7 +93,7 @@ class KeysServiceTest {
     }
 
     @Test
-    public void testKeysWhenMatchersLettersSpecific() {
+    void testKeysWhenMatchersLettersSpecific() {
         String pattern = "h[a-b]llo";
         List<String> keys = List.of("hello", "hallo", "hbllo");
         List<String> expected = List.of("hallo", "hbllo");

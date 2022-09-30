@@ -2,6 +2,7 @@ package ru.kh.redis.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.kh.redis.dto.keysDto.KeyDto;
 import ru.kh.redis.models.Key;
 import ru.kh.redis.models.entities.StoredEntity;
 import ru.kh.redis.models.entities.StringEntity;
@@ -18,7 +19,8 @@ public class SingleStringsService {
         this.cacheRepository = cacheRepository;
     }
 
-    public String getStringValueByKey(Key key) {
+    public String getStringValueByKey(KeyDto keydto) {
+        Key key = new Key(keydto.getKey());
         if (!isKeyExist(key)) {
             return Consts.ERROR_MESSAGE_KEY_NOT_FOUND;
         }
@@ -33,12 +35,12 @@ public class SingleStringsService {
         if (isKeyExist(key)) {
             if (isValueStringEntity(cacheRepository.getValue(key))) {
                 cacheRepository.putValue(key, value);
-                return "OK";
+                return Consts.OK;
             }
             return Consts.ERROR_MESSAGE_WRONG_TYPE;
         }
         cacheRepository.putValue(key, value);
-        return "OK";
+        return Consts.OK;
     }
 
     private boolean isValueStringEntity(StoredEntity value) {

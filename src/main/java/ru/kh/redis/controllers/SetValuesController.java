@@ -3,7 +3,6 @@ package ru.kh.redis.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,10 +24,7 @@ public class SetValuesController {
     }
 
     @PostMapping("/hset")
-    public ResponseEntity<String> hset(@RequestBody @Valid SetHsetDto setHsetDto, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            return ResponseErrorGenerator.generateErrorResponseByBinding(bindingResult);
-        }
+    public ResponseEntity<String> hset(@RequestBody @Valid SetHsetDto setHsetDto) {
         String result = setService.setEntryValuesFields(setHsetDto);
         ResponseEntity<String> responseError = ResponseErrorGenerator
                 .validateResultForKeyNotFoundOrWrongTypeErrors(result);
@@ -39,10 +35,7 @@ public class SetValuesController {
     }
 
     @PostMapping("/hget")
-    public ResponseEntity<String> hget(@RequestBody @Valid SetHgetDto setHgetDto, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            return ResponseErrorGenerator.generateErrorResponseByBinding(bindingResult);
-        }
+    public ResponseEntity<String> hget(@RequestBody @Valid SetHgetDto setHgetDto) {
         String result = setService.getFieldByKeySet(setHgetDto);
         ResponseEntity<String> responseError = ResponseErrorGenerator
                 .validateResultForKeyNotFoundOrWrongTypeErrors(result);

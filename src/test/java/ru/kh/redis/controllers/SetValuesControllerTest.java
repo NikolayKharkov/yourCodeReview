@@ -1,6 +1,5 @@
 package ru.kh.redis.controllers;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,9 @@ import ru.kh.redis.services.SetService;
 import ru.kh.redis.dto.setsDto.SetHgetDto;
 import ru.kh.redis.dto.setsDto.SetHsetDto;
 import ru.kh.redis.utils.Consts;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 @WebMvcTest(value = SetValuesController.class)
 class SetValuesControllerTest {
@@ -39,54 +41,54 @@ class SetValuesControllerTest {
 
     @Test
     void testHsetWhenSetNotExist() throws Exception {
-        Mockito.when(setService.setEntryValuesFields(Mockito.any(SetHsetDto.class)))
+        when(setService.setEntryValuesFields(Mockito.any(SetHsetDto.class)))
                 .thenReturn(DEFAULT_SET_SIZE);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(HSET)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(jsonExampleHset)
                 .contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = mvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
-        Assertions.assertEquals(DEFAULT_SET_SIZE, response.getContentAsString());
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(DEFAULT_SET_SIZE, response.getContentAsString());
     }
 
     @Test
     void testHsetWhenSetToStringEntityThenErrorType() throws Exception {
-        Mockito.when(setService.setEntryValuesFields(Mockito.any(SetHsetDto.class)))
+        when(setService.setEntryValuesFields(Mockito.any(SetHsetDto.class)))
                 .thenReturn(Consts.ERROR_MESSAGE_WRONG_TYPE);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(HSET)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(jsonExampleHset)
                 .contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = mvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        Assertions.assertEquals(Consts.ERROR_MESSAGE_WRONG_TYPE, response.getContentAsString());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+        assertEquals(Consts.ERROR_MESSAGE_WRONG_TYPE, response.getContentAsString());
     }
 
     @Test
     void testHgetWhenSetIsExist() throws Exception {
         String expectedValue = "value1";
-        Mockito.when(setService.getFieldByKeySet(Mockito.any(SetHgetDto.class)))
+        when(setService.getFieldByKeySet(Mockito.any(SetHgetDto.class)))
                 .thenReturn(expectedValue);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(HGET)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(jsonExampleHget)
                 .contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = mvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
-        Assertions.assertEquals(expectedValue, response.getContentAsString());
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(expectedValue, response.getContentAsString());
     }
 
     @Test
     void testHgetWhenSetNotExist() throws Exception {
-        Mockito.when(setService.getFieldByKeySet(Mockito.any(SetHgetDto.class)))
+        when(setService.getFieldByKeySet(Mockito.any(SetHgetDto.class)))
                 .thenReturn(Consts.ERROR_MESSAGE_KEY_NOT_FOUND);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(HGET)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(jsonExampleHget)
                 .contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = mvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        Assertions.assertEquals(Consts.ERROR_MESSAGE_KEY_NOT_FOUND, response.getContentAsString());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+        assertEquals(Consts.ERROR_MESSAGE_KEY_NOT_FOUND, response.getContentAsString());
     }
 }

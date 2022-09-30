@@ -3,7 +3,6 @@ package ru.kh.redis.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,12 +26,8 @@ public class StringValuesController {
     }
 
     @PostMapping("/get")
-    public ResponseEntity<String> get(@RequestBody @Valid KeyDto keyDto, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-           return ResponseErrorGenerator.generateErrorResponseByBinding(bindingResult);
-        }
-        Key key = Key.createKeyFromKeyDto(keyDto);
-        String result = singleStringsService.getStringValueByKey(key);
+    public ResponseEntity<String> get(@RequestBody @Valid KeyDto keyDto) {
+        String result = singleStringsService.getStringValueByKey(keyDto);
         ResponseEntity<String> responseError = ResponseErrorGenerator
                 .validateResultForKeyNotFoundOrWrongTypeErrors(result);
         if (responseError != null) {
@@ -42,11 +37,7 @@ public class StringValuesController {
     }
 
     @PostMapping("/set")
-    public ResponseEntity<String> set(@RequestBody @Valid StringStoredEntityDto storedEntityDto,
-                                      BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            return ResponseErrorGenerator.generateErrorResponseByBinding(bindingResult);
-        }
+    public ResponseEntity<String> set(@RequestBody @Valid StringStoredEntityDto storedEntityDto) {
         String result = singleStringsService.setValue(new Key(storedEntityDto.getKey()),
                 new StringEntity(storedEntityDto.getValue()));
         ResponseEntity<String> responseError = ResponseErrorGenerator

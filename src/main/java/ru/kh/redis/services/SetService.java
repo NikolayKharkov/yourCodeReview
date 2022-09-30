@@ -53,14 +53,4 @@ public class SetService {
     private boolean isKeyExist(Key key) {
         return cacheRepository.hasKey(key);
     }
-
-    private String validateValueByKey(Key key) {
-        if (!isKeyExist(key)) {
-            return "(nil)";
-        }
-        if (!isValueSetEntity(cacheRepository.getValue(key))) {
-            return Consts.ERROR_MESSAGE_WRONG_TYPE;
-        }
-        return "OK";
-    }
 }

@@ -12,15 +12,17 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.kh.redis.models.Key;
+import ru.kh.redis.dto.keysDto.KeyDto;
 import ru.kh.redis.services.ListService;
 import ru.kh.redis.dto.listsDto.ListEntityDto;
 import ru.kh.redis.dto.listsDto.ListLGetDto;
 import ru.kh.redis.dto.listsDto.ListLindexDto;
 import ru.kh.redis.dto.listsDto.ListLsetDto;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 @WebMvcTest(value = ListValuesController.class)
 class ListValuesControllerTest {
@@ -59,7 +61,7 @@ class ListValuesControllerTest {
 
     @Test
     void testLpushWhenNewList() throws Exception {
-        Mockito.when(listService.pushValuesOrCreate(Mockito.any(ListEntityDto.class)))
+        when(listService.pushValuesOrCreate(Mockito.any(ListEntityDto.class)))
                 .thenReturn(DEFAULT_SIZE_LIST);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(LPUSH)
                 .accept(MediaType.APPLICATION_JSON)
@@ -72,7 +74,7 @@ class ListValuesControllerTest {
 
     @Test
     void testLsetWhenListExist() throws Exception {
-        Mockito.when(listService.replaceValueByIndex(Mockito.any(ListLsetDto.class)))
+        when(listService.replaceValueByIndex(Mockito.any(ListLsetDto.class)))
                 .thenReturn(DEFAULT_SIZE_LIST);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(LSET)
                 .accept(MediaType.APPLICATION_JSON)
@@ -93,34 +95,34 @@ class ListValuesControllerTest {
                 .content(jsonExampleLget)
                 .contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = mvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
-        Assertions.assertEquals(values, response.getContentAsString());
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(values, response.getContentAsString());
     }
 
     @Test
     void testLindexWhenListExist() throws Exception {
         String value = "value1";
-        Mockito.when(listService.getElementFromListByKey(Mockito.any(ListLindexDto.class)))
+        when(listService.getElementFromListByKey(Mockito.any(ListLindexDto.class)))
                 .thenReturn(value);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(LINDEX)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(jsonExampleLindex)
                 .contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = mvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
-        Assertions.assertEquals(value, response.getContentAsString());
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(value, response.getContentAsString());
     }
 
     @Test
     void testLlenWhenListExist() throws Exception {
-        Mockito.when(listService.getListSize(Mockito.any(Key.class)))
+        when(listService.getListSize(Mockito.any(KeyDto.class)))
                 .thenReturn(DEFAULT_SIZE_LIST);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(LLEN)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(jsonExampleLlen)
                 .contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = mvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
-        Assertions.assertEquals(DEFAULT_SIZE_LIST, response.getContentAsString());
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(DEFAULT_SIZE_LIST, response.getContentAsString());
     }
 }

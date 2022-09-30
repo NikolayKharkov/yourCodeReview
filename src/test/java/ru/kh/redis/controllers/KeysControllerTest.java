@@ -1,6 +1,5 @@
 package ru.kh.redis.controllers;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.kh.redis.services.KeysService;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 @WebMvcTest(value = KeysController.class)
 class KeysControllerTest {
@@ -40,28 +42,28 @@ class KeysControllerTest {
     @Test
     public void testDel() throws Exception {
         String[] array = new String[0];
-        Mockito.when(keysService.delKeys(Mockito.any(array.getClass())))
+        when(keysService.delKeys(Mockito.any(array.getClass())))
                 .thenReturn(NUM_DELETE_KEYS);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(DEL)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(jsonExampleDel)
                 .contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = mvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
-        Assertions.assertEquals(NUM_DELETE_KEYS_TEXT, response.getContentAsString());
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(NUM_DELETE_KEYS_TEXT, response.getContentAsString());
     }
 
     @Test
     public void testKeys() throws Exception {
-        Mockito.when(keysService.getKeys(Mockito.any(String.class)))
+        when(keysService.getKeys(Mockito.any(String.class)))
                 .thenReturn(resultOfKeyPattern);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(KEYS)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(jsonExampleKeys)
                 .contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = mvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
-        Assertions.assertEquals(resultOfKeyPattern, response.getContentAsString());
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(resultOfKeyPattern, response.getContentAsString());
     }
 
 }
